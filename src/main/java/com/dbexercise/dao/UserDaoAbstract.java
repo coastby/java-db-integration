@@ -6,20 +6,10 @@ import com.dbexercise.domain.User;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class UserDao {
-    private Connection makeConnection() throws SQLException {
-        Map<String, String> env = System.getenv();
-        String dbHost = env.get("DB_HOST");
-        String dbUser = env.get("DB_USER");
-        String dbPassword = env.get("DB_PASSWORD");
-
-        //db와 연결하는 단계
-        Connection conn = DriverManager.getConnection(dbHost, dbUser, dbPassword); //db연결
-        return conn;
-    }
-
+public abstract class UserDaoAbstract {
+    //makeConnection() 메소드의 구현체를 없앤다
+    public abstract Connection makeConnection() throws SQLException;
 
     public void add(User user) throws SQLException {
         Connection conn = makeConnection();
