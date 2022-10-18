@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class UserDao {
+public class UserDao_Deprecated {
     private Connection makeConnection() throws SQLException {
         Map<String, String> env = System.getenv();
         String dbHost = env.get("DB_HOST");

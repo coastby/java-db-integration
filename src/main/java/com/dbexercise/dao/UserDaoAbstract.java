@@ -32,8 +32,13 @@ public abstract class UserDaoAbstract {
         ps.setString(1, id);
 
         ResultSet rs = ps.executeQuery();
-        rs.next();
-        User user = new User(rs.getString("id"), rs.getString("name"), rs.getString("password"));
+        User user;
+
+        if (rs.next()){         //찾는 아이디가 있으면 해당 객체 반환, 없으면 null 반환
+            user = new User(rs.getString("id"), rs.getString("name"), rs.getString("password"));
+        } else {
+            return null;
+        }
 
         System.out.println("SELECT 완료");
         rs.close();
@@ -60,5 +65,15 @@ public abstract class UserDaoAbstract {
         return userList;
     }
 
+    public void deleteById(String id) throws SQLException {
+        Connection conn = makeConnection();
+        //쿼리를 작성하는 코드
+        PreparedStatement ps = conn.prepareStatement("DELETE FROM Users WHERE id=?");
+        ps.setString(1, id);
+        ps.executeUpdate();
 
+        System.out.println(id +" 삭제 완료");
+        ps.close();
+        conn.close();
+    }
 }
