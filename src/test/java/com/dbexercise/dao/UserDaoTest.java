@@ -5,12 +5,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
+import java.util.List;
 
 class UserDaoTest {
+    UserDao userDao = new UserDao(new AwsConnectionMaker());
     @Test
-    void addAndSelect () throws SQLException, ClassNotFoundException {
-        UserDao userDao = new UserDao(new AwsConnectionMaker());
-        String id = "8";
+    void addAndSelect () throws SQLException {
+        String id = "3";
         User user = new User(id, "jo", "coconut");
         userDao.add(user);
 
@@ -18,17 +19,35 @@ class UserDaoTest {
         Assertions.assertEquals("jo", user1.getName());
     }
 
-//        List<User> userList = userDao.findAll();
-//        for (User user : userList) {
-//            System.out.println(user.getName());
-//         }
     @Test
-    void deleteTest () throws SQLException {
-        UserDao userDao = new UserDao(new AwsConnectionMaker());
+    void findAllTest() throws SQLException {
+        List<User> userList = userDao.findAll();
+        for (User user : userList) {
+            System.out.println(user.getName());
+         }
+
+    }
+
+    @Test
+    void deleteByIdTest() throws SQLException {
         String id = "8";
         userDao.deleteById(id);
 
         User user1 = userDao.findById(id);
         Assertions.assertNull(user1);
+    }
+
+    @Test
+    void deleteAllandCountTest() throws SQLException {
+        userDao.deleteAll();
+
+        Assertions.assertEquals(0, userDao.getCount());
+    }
+
+    //Assertion은 어떻게 할 지 생각해봐야겠음
+    @Test
+    void getCountTest() throws SQLException {
+        System.out.println(userDao.getCount());
+
     }
 }

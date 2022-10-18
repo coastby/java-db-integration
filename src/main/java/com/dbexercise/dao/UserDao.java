@@ -83,5 +83,30 @@ public class UserDao {
         conn.close();
     }
 
+    public void deleteAll() throws SQLException {
+        Connection conn = connectionMaker.makeConnection();
+        //쿼리를 작성하는 코드
+        PreparedStatement ps = conn.prepareStatement("TRUNCATE TABLE Users");
+        ps.executeUpdate();
+
+        System.out.println("테이블 비우기 완료");
+        ps.close();
+        conn.close();
+    }
+
+    public int getCount() throws SQLException {
+        Connection conn = connectionMaker.makeConnection();
+        //쿼리를 작성하는 코드
+        PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) AS COUNT FROM Users");
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        int cnt = rs.getInt("COUNT");
+        rs.close();
+        ps.close();
+        conn.close();
+
+        return cnt;
+    }
+
 
 }
