@@ -9,8 +9,8 @@ import java.sql.SQLException;
 class UserDaoTest {
     @Test
     void addAndSelect () throws SQLException, ClassNotFoundException {
-        AWSUserDaoImpl userDao = new AWSUserDaoImpl();
-        String id = "7";
+        UserDao userDao = new UserDao(new AwsConnectionMaker());
+        String id = "8";
         User user = new User(id, "jo", "coconut");
         userDao.add(user);
 
@@ -24,8 +24,8 @@ class UserDaoTest {
 //         }
     @Test
     void deleteTest () throws SQLException {
-        AWSUserDaoImpl userDao = new AWSUserDaoImpl();
-        String id = "6";
+        UserDao userDao = new UserDao(new AwsConnectionMaker());
+        String id = "8";
         userDao.deleteById(id);
 
         User user1 = userDao.findById(id);

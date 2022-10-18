@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class UserDaoAbstract {
+public abstract class UserDaoAbstract_deprecated {
     //makeConnection() 메소드의 구현체를 없앤다
     public abstract Connection makeConnection() throws SQLException;
 

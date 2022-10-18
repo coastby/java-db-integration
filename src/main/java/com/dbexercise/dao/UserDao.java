@@ -8,21 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class UserDao_Deprecated {
-    private Connection makeConnection() throws SQLException {
-        Map<String, String> env = System.getenv();
-        String dbHost = env.get("DB_HOST");
-        String dbUser = env.get("DB_USER");
-        String dbPassword = env.get("DB_PASSWORD");
+public class UserDao {
 
-        //db와 연결하는 단계
-        Connection conn = DriverManager.getConnection(dbHost, dbUser, dbPassword); //db연결
-        return conn;
+    private ConnectionMaker connectionMaker;
+
+    public UserDao(ConnectionMaker connectionMaker) {
+        this.connectionMaker = connectionMaker;
     }
 
-
     public void add(User user) throws SQLException {
-        Connection conn = makeConnection();
+        Connection conn = connectionMaker.makeConnection();
 
         PreparedStatement ps = conn.prepareStatement("INSERT INTO Users(id, name, password) VALUES(?, ?, ?)");
         ps.setString(1, user.getId());
@@ -36,14 +31,20 @@ public class UserDao_Deprecated {
     }
 
     public User findById(String id) throws SQLException {
-        Connection conn = makeConnection();
+        Connection conn = connectionMaker.makeConnection();
         //쿼리를 작성하는 코드
         PreparedStatement ps = conn.prepareStatement("SELECT id, name, password FROM Users WHERE id=?");
         ps.setString(1, id);
 
         ResultSet rs = ps.executeQuery();
-        rs.next();
-        User user = new User(rs.getString("id"), rs.getString("name"), rs.getString("password"));
+        User user;
+
+        if (rs.next()){         //찾는 아이디가 있으면 해당 객체 반환, 없으면 null 반환
+            user = new User(rs.getString("id"), rs.getString("name"), rs.getString("password"));
+        } else {
+            System.out.println("찾는 ID가 없습니다.");
+            return null;
+        }
 
         System.out.println("SELECT 완료");
         rs.close();
@@ -53,7 +54,7 @@ public class UserDao_Deprecated {
         return user;
     }
     public List<User> findAll() throws SQLException {
-        Connection conn = makeConnection();
+        Connection conn = connectionMaker.makeConnection();
         //쿼리를 작성하는 코드
         PreparedStatement ps = conn.prepareStatement("SELECT * FROM Users");
         ResultSet rs = ps.executeQuery();
@@ -68,6 +69,18 @@ public class UserDao_Deprecated {
         conn.close();
 
         return userList;
+    }
+
+    public void deleteById(String id) throws SQLException {
+        Connection conn = connectionMaker.makeConnection();
+        //쿼리를 작성하는 코드
+        PreparedStatement ps = conn.prepareStatement("DELETE FROM Users WHERE id=?");
+        ps.setString(1, id);
+        ps.executeUpdate();
+
+        System.out.println(id +" 삭제 완료");
+        ps.close();
+        conn.close();
     }
 
 

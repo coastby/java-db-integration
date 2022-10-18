@@ -1,15 +1,11 @@
 package com.dbexercise.dao;
 
-import com.dbexercise.domain.User;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 
-public class AWSUserDaoImpl extends UserDaoAbstract{
-    @Override
+public class AwsConnectionMaker implements ConnectionMaker{
     public Connection makeConnection() throws SQLException {
         Map<String, String> env = System.getenv();
         String dbHost = env.get("DB_HOST");
