@@ -8,7 +8,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 class UserDaoTest {
-    UserDao userDao = new UserDao(new AwsConnectionMaker());
+//    UserDao userDao = new UserDao(new AwsConnectionMaker());
+    UserDao userDao = new UserDaoFactory().awsUserDao();
     @Test
     void addAndSelect () throws SQLException {
         String id = "3";
@@ -48,6 +49,5 @@ class UserDaoTest {
     @Test
     void getCountTest() throws SQLException {
         System.out.println(userDao.getCount());
-
     }
 }
